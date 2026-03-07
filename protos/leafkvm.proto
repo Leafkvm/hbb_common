@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package hbb;
+
+enum Codec {
+	CODEC_UNSPECIFIED = 0;
+	CODEC_H264 = 1;
+	CODEC_H265 = 2;
+}
+
+message ShmFd {
+	uint32 capacity = 1;
+}
+
+message FrameMetadata {
+	bool is_key = 1;
+    Codec codec = 2;
+}
+
+message FrameReady {
+	uint32 offset = 1;
+	uint32 length = 2;
+	FrameMetadata metadata = 3;
+}
+
+message VideoInputState {
+	bool is_connected = 1;
+	uint32 width = 2;
+	uint32 height = 3;
+}
+
+message Down {
+	oneof union {
+		ShmFd shm_fd = 1;
+		FrameReady frame_ready = 2;
+		VideoInputState video_input_state = 3;
+	}
+}
+
+message SelectEncoder {
+	Codec codec = 1;
+}
+
+message InputEvent {
+	bytes payload = 1;
+}
+
+message SubscribeVideo {}
+
+message RequestVideoInputState {}
+
+message Up {
+	oneof union {
+		SelectEncoder select_encoder = 1;
+		InputEvent input_event = 2;
+		SubscribeVideo subscribe_video = 3;
+		RequestVideoInputState request_video_input_state = 4;
+	}
+}
