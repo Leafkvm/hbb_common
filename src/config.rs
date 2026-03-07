@@ -641,7 +641,7 @@ impl Config {
             path.push(p);
             return path;
         }
-        #[cfg(not(any(target_os = "android", target_os = "ios")))]
+        #[cfg(not(any(target_os = "android", target_os = "ios", feature = "leafkvm")))]
         {
             #[cfg(not(target_os = "macos"))]
             let org = "".to_owned();
@@ -656,6 +656,12 @@ impl Config {
                 return path;
             }
             "".into()
+        }
+        #[cfg(feature = "leafkvm")]
+        {
+            let mut path = PathBuf::from("/userdata/rustdesk-config");
+            path.push(p);
+            return path;
         }
     }
 
