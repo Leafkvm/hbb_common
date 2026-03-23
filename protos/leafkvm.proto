@@ -39,6 +39,7 @@ message Down {
 
 message SelectEncoder {
 	Codec codec = 1;
+	float quality = 2;
 }
 
 message InputEvent {
